@@ -651,9 +651,9 @@ class BaseModelMutation(BaseMutation):
                 # register
                 gd_registry(),
                 # fields
-                cls._meta.only_fields,
+                only_fields or cls._meta.only_fields,
                 # exclude
-                cls._meta.exclude_fields,
+                exclude_fields or cls._meta.exclude_fields,
                 # convert_choices_to_enum
                 cls._meta.convert_choices_to_enum,
             ]
