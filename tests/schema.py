@@ -1,8 +1,12 @@
+import datetime
+
 import graphene
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import IsAuthenticated
 
+from graphene_django_extras import all_directives
+from graphene_django_extras.base_types import CustomDateTime, CustomDate, CustomTime
 from graphene_django_extras.types import (
     DjangoListObjectType,
     DjangoSerializerType,
@@ -100,10 +104,22 @@ class Query(graphene.ObjectType):
     get_basic_model_id = DjangoNode.Field(
         BasicModelNodeType, permission_classes=(IsAuthenticated, )
     )
+    datetime_ = CustomDateTime(name="datetime")
+    date_ = CustomDate(name="date")
+    time_ = CustomTime(name="time")
+
 
     retrieve_basic_model_id = RetrieveField(
         BasicModelType, permission_classes=(IsAuthenticated,)
     )
+    def resolve_datetime_(self, info, *args, **kwargs):
+        return datetime.datetime(2020, 12, 31, 10, 21, 30)
+
+    def resolve_date_(self, info, *args, **kwargs):
+        return datetime.date(2020, 12, 31)
+
+    def resolve_time_(self, info, *args, **kwargs):
+        return datetime.time(10, 21, 30)
 
 
-schema = graphene.Schema(query=Query, mutation=Mutation)
+schema = graphene.Schema(query=Query, mutation=Mutation, directives=all_directives)
