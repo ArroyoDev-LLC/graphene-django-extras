@@ -77,7 +77,7 @@ class DjangoConnectionPageLimitField(DjangoConnectionField):
         is_queryset = isinstance(qs, QuerySet)
 
         if is_queryset:
-            qs = queryset_refactor(qs, info.field_asts, fragments=info.fragments, **kwargs)
+            qs = queryset_refactor(qs, info.field_nodes, fragments=info.fragments, **kwargs)
 
         if order and is_queryset:
             if "," in order:

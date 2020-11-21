@@ -121,7 +121,7 @@ class DjangoBaseListField(GraphqlPermissionMixin, Field):
 
     @classmethod
     def refactor_query(cls, manager, info, fragments=None, **kwargs):
-        return queryset_refactor(manager, info.field_asts, fragments, **kwargs)
+        return queryset_refactor(manager, info.field_nodes, fragments, **kwargs)
 
     @classmethod
     def get_queryset(cls, manager):

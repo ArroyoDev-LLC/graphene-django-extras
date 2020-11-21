@@ -443,14 +443,14 @@ def extract_requested_fields(
         function with the `ResolveInfo` object passed to the resolver.
 
         >>> query = "query getAuthor{author(authorId: 1){nameFirst, nameLast}}"
-        >>> extract_requested_fields(info, info.field_asts, True)
+        >>> extract_requested_fields(info, info.field_nodes, True)
         {'author': {'name_first': None, 'name_last': None}}
 
     Args:
         info (graphql.execution.base.ResolveInfo): The GraphQL query info passed
             to the resolver function.
-        fields (List[Union[Field, FragmentSpread]]): The list of `Field` or
-            `FragmentSpread` objects parsed out of the GraphQL query and stored
+        fields (List[Union[Field, FragmentSpreadNode]]): The list of `Field` or
+            `FragmentSpreadNode` objects parsed out of the GraphQL query and stored
             in the AST.
         do_convert_to_snake_case (bool): Whether to convert the fields as they
             appear in the GraphQL query (typically in camel-case) back to
@@ -489,7 +489,7 @@ def extract_requested_fields(
                     fields=field.selection_set.selections,
                 )
                 result[key] = val
-        # If the field is of type `FragmentSpread` then retrieve the fragment
+        # If the field is of type `FragmentSpreadNode` then retrieve the fragment
         # from `info.fragments` and recursively extract the nested fields but
         # as we don't want the name of the fragment appearing in the result
         # dictionary (since it does not match anything in the ORM classes) the
@@ -536,7 +536,7 @@ def queryset_builder(manager, info, filter_kwargs):
     prefetch_related = []
 
     qs = _get_queryset(manager)
-    fields = extract_requested_fields(info, info.field_asts, True)
+    fields = extract_requested_fields(info, info.field_nodes, True)
 
     available_related_fields = get_related_fields(qs.model)
     first_item = fields.pop(next(iter(fields)))
