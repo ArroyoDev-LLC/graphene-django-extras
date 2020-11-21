@@ -6,7 +6,7 @@ from graphene.relay.connection import IterableConnectionField, PageInfo
 from graphene.utils.thenables import maybe_thenable
 from graphene_django import DjangoConnectionField
 from graphene_django.filter import DjangoFilterConnectionField
-from graphql_relay.connection.arrayconnection import connection_from_list_slice
+from graphql_relay.connection.arrayconnection import connection_from_array_slice
 from graphene_django_extras.settings import graphql_api_settings
 from graphene_django_extras.utils import queryset_refactor, _get_queryset
 
@@ -30,7 +30,7 @@ class ConnectionField(IterableConnectionField):
             _len = resolved.count()
         else:
             _len = len(resolved)
-        connection = connection_from_list_slice(
+        connection = connection_from_array_slice(
             resolved,
             args,
             slice_start=0,
