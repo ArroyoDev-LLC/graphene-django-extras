@@ -201,7 +201,7 @@ class FilterListFieldResolverMixin:
 
         if root and is_valid_django_model(root._meta.model):
             available_related_fields = get_related_fields(root._meta.model)
-            field = find_field(info.field_asts[0], available_related_fields)
+            field = find_field(info.field_nodes[0], available_related_fields)
         filter_kwargs = {k: v for k, v in kwargs.items() if k in filtering_args}
 
         if field is not None:
