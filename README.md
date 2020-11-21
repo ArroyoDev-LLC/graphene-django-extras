@@ -549,6 +549,9 @@ You can use this shortcuts too:
 
 
 ## Change Log:
+#### v0.6.0:
+    1. graphene/graphene-django v3 support
+
 #### v0.5:
     1. List and Paginated fields can be resolved manually
     2. Fixed fields compatibility issues graphene_django DjangoObjectType
