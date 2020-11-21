@@ -35,7 +35,7 @@ class BaseNodeField(GraphqlPermissionMixin, Field):
         self.check_object_permissions(info.context, obj)
         return obj
 
-    def get_resolver(self, parent_resolver):
+    def wrap_resolver(self, parent_resolver):
         return partial(self.query_resolver)
 
 

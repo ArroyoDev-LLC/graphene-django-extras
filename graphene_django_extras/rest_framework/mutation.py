@@ -151,7 +151,7 @@ class BaseMutation(GraphqlPermissionMixin, MutationErrorHandler, ObjectType):
 
         argument = OrderedDict(
             {
-                i: Argument(type=t.type, description=t.description, name=t.name, required=getattr(t, 'required', None))
+                i: Argument(type_=t.type, description=t.description, name=t.name, required=getattr(t, 'required', None))
                 for i, t in input_fields.items()
             }
         )

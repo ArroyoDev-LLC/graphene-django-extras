@@ -20,6 +20,7 @@ from django.db.models import (
     ForeignKey
 )
 from django.db.models.base import ModelBase
+from graphene import Field
 from graphene.utils.str_converters import to_snake_case
 from graphene_django.utils import is_valid_django_model
 from graphql import GraphQLList, GraphQLNonNull
@@ -426,8 +427,8 @@ def get_model_fk_fields(model):
 
 
 def extract_requested_fields(
-    info: graphql.execution.base.ResolveInfo,
-    fields: List[Union[Field, FragmentSpread]],
+    info: graphql.GraphQLResolveInfo,
+    fields: List[Union[Field, FragmentSpreadNode]],
     do_convert_to_snake_case: bool = True,
 ) -> Dict:
     """Extracts the fields requested in a GraphQL query by processing the AST
@@ -493,7 +494,7 @@ def extract_requested_fields(
         # as we don't want the name of the fragment appearing in the result
         # dictionary (since it does not match anything in the ORM classes) the
         # result will simply be result of the extraction.
-        elif isinstance(field, FragmentSpread):
+        elif isinstance(field, FragmentSpreadNode):
             # Retrieve referened fragment.
             fragment = info.fragments[field.name.value]
             # Extract field names out of the fragment selections.

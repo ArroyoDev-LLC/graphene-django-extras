@@ -45,7 +45,7 @@ class DjangoObjectField(Field):
         except manager.model.DoesNotExist:
             return None
 
-    def get_resolver(self, parent_resolver):
+    def wrap_resolver(self, parent_resolver):
         return partial(self.object_resolver, self.type._meta.model._default_manager)
 
 
@@ -143,7 +143,7 @@ class DjangoBaseListField(GraphqlPermissionMixin, Field):
         self.check_permissions(request=info.context)
         return self.list_resolver(resolver, manager, filterset_class, filtering_args, root, info, **kwargs)
 
-    def get_resolver(self, parent_resolver):
+    def wrap_resolver(self, parent_resolver):
         return partial(
             self.list_resolver_permission_check,
             parent_resolver,
@@ -181,7 +181,7 @@ class DjangoBaseFilterListField(DjangoBaseListField):
     def list_resolver(self, resolver, manager, filterset_class, filtering_args, root, info, **kwargs):
         raise NotImplementedError('list_resolver must be implemented')
 
-    def get_resolver(self, parent_resolver):
+    def wrap_resolver(self, parent_resolver):
         current_type = self.type
         while isinstance(current_type, Structure):
             current_type = current_type.of_type
