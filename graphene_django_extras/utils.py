@@ -20,11 +20,10 @@ from django.db.models import (
     ForeignKey
 )
 from django.db.models.base import ModelBase
-from graphene import Field
 from graphene.utils.str_converters import to_snake_case
 from graphene_django.utils import is_valid_django_model
 from graphql import GraphQLList, GraphQLNonNull
-from graphql.language.ast import FragmentSpreadNode, InlineFragmentNode
+from graphql.language.ast import FragmentSpreadNode, InlineFragmentNode, FieldNode
 
 
 def get_reverse_fields(model):
@@ -428,7 +427,7 @@ def get_model_fk_fields(model):
 
 def extract_requested_fields(
     info: graphql.GraphQLResolveInfo,
-    fields: List[Union[Field, FragmentSpreadNode]],
+    fields: List[Union[FieldNode, FragmentSpreadNode]],
     do_convert_to_snake_case: bool = True,
 ) -> Dict:
     """Extracts the fields requested in a GraphQL query by processing the AST
@@ -449,7 +448,7 @@ def extract_requested_fields(
     Args:
         info (graphql.execution.base.ResolveInfo): The GraphQL query info passed
             to the resolver function.
-        fields (List[Union[Field, FragmentSpreadNode]]): The list of `Field` or
+        fields (List[Union[FieldNode, FragmentSpreadNode]]): The list of `FieldNode` or
             `FragmentSpreadNode` objects parsed out of the GraphQL query and stored
             in the AST.
         do_convert_to_snake_case (bool): Whether to convert the fields as they
@@ -474,11 +473,11 @@ def extract_requested_fields(
         # will have a dictionary value of `None`.
         val = None
 
-        # If the field is of type `Field` then extract the nested fields under
+        # If the field is of type `FieldNode` then extract the nested fields under
         # the `selection_set` (if defined). These nested fields will be
         # extracted recursively and placed in a dictionary under the field
         # name in the `result` dictionary.
-        if isinstance(field, Field):
+        if isinstance(field, FieldNode):
             if (
                 hasattr(field, "selection_set") and
                 field.selection_set is not None
