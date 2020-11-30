@@ -539,6 +539,9 @@ def queryset_builder(manager, info, filter_kwargs):
 
     available_related_fields = get_related_fields(qs.model)
     first_item = fields.pop(next(iter(fields)))
+    
+    model_field = qs.model._meta.model_name.lower()
+    first_item = first_item.get(model_field, first_item)
 
     for name, val in first_item.items():
         query_parent = []
