@@ -462,6 +462,11 @@ def extract_requested_fields(
     result = {}
     for field in fields:
 
+        # Any inline fragments will be resolved
+        # later via the spread operator.
+        if isinstance(field, InlineFragmentNode):
+            continue
+
         # Set the `key` as the field name.
         key = field.name.value
 
